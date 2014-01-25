@@ -20,10 +20,13 @@ function Actor(level, data) {
     entity.onTick(this.tick.bind(this));
   }
 
-  entity.onTick(Actor.updateSoundNodes.bind(this));
+  this.shouldUpdateSound = data.shouldUpdateSound;
+  if (this.shouldUpdateSound === true){
+    entity.onTick(Actor.updateSoundNodes.bind(this));
+    // An array of currently playing sounds.
+    this.sounds = [];
+  }
 
-  // An array of currently playing sounds.
-  this.sounds = [];
   var p = this.entity.position();
   this.lastPosition = {x:p.x, y:p.y};
 
@@ -73,15 +76,19 @@ Actor.prototype.loadSound = function(snd, cb){
   var p = this.entity.position();
 
   var callback = function(e){
+  if (this.shouldUpdateSound === true){
     _.remove(this.sounds, function(i){
       return (i === s);
     });
+  }
     if (cb !== undefined){
       cb();
     }
   };
   var s = new sound.SoundNode(snd, p.x, p.y, 0, callback.bind(this));
-  this.sounds.push(s);
+  if (this.shouldUpdateSound === true){
+    this.sounds.push(s);
+  }
   return s;
 };
 
