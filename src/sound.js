@@ -34,12 +34,18 @@ sound.SoundNode = function(soundFile, x, y, z, callback){
   this.volume.connect(this.panner);
   this.panner.connect(volume);
 
-  var buffer = ctx.createBuffer(soundFile.response, false);
-
+  var buffer = ctx.createBuffer(soundFile, false);
   soundFile.buffer = buffer;
 
   this.source.buffer = soundFile.buffer;
   this.source.start(ctx.currentTime);
+
+  this.source.onended = function(e){
+    if (callback !== undefined){
+      callback(e);
+    }
+  };
+
 };
 
 
