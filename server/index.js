@@ -35,10 +35,12 @@ cloak.configure({
       var roles = room.data.roles = room.data.roles || {};
       var members = room.getMembers();
 
+      // Filter out any users with closed connections
       var activeMembers = members.filter(function(member) {
         return !member._socket.disconnected;
       });
 
+      // Prevent more then 2 users from joining this room.
       if (activeMembers.length >= ROOM_SIZE && !_.contains(members, user)) {
         user.message('roomFull', roomName);
         return;
@@ -50,7 +52,6 @@ cloak.configure({
 
       role = activeRoles[0] === 'deaf'? 'blind' : 'deaf';
 
-      console.log(user.id, role);
       roles[user.id] = role;
       user.message('assignRole', role);
       room.addMember(user);
@@ -58,10 +59,6 @@ cloak.configure({
 
     room: {
       close: roomUtils.cleanUpRoomOnClose,
-
-      memberLeaves: function() {
-        console.log('asdfasdf');
-      }
     },
 
     reportPosition: function(user, data) {

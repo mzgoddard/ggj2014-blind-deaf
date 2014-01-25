@@ -31,7 +31,6 @@ cloak.configure({
     },
 
     assignRole: function(role) {
-      console.log('setPlayerSlog', role === 'deaf'? 0 : 1, role);
       Level.setPlayerSlot(role === 'deaf'? 0 : 1);
     },
 
