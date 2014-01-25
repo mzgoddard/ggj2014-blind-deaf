@@ -67,18 +67,27 @@ Actor.create = function(level, data) {
   return _actorTypes[data.type](level, data);
 };
 
-Actor.prototype.playSound = function(snd, callback){
+Actor.prototype.loadSound = function(snd, cb){
+  // Gets the sound ready and starts tracking the sound, but doesn't play it
+  // incase you want to mess with the settings first.
   var p = this.entity.position();
 
   var callback = function(e){
     _.remove(this.sounds, function(i){
       return (i === s);
     });
+    if (cb !== undefined){
+      cb();
+    }
   };
-
   var s = new sound.SoundNode(snd, p.x, p.y, 0, callback.bind(this));
-  s.source.start(sound.ctx.currentTime);
   this.sounds.push(s);
+  return s;
+};
+
+Actor.prototype.playSound = function(snd, cb){
+  var s = this.loadSound(snd, cb);
+  s.source.start(sound.ctx.currentTime);
   return s;
 };
 
