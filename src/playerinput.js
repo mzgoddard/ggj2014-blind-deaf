@@ -72,6 +72,15 @@ PlayerInput.prototype.getActor = function() {
   return this.activeActor;
 };
 
+// The networked player
+PlayerInput.prototype.getNetPlayer = function() {
+  var player = this.getActor();
+  var nonPlayers = this.actors.filter(function(actor) {
+    return actor != player;
+  });
+  return nonPlayers[0];
+};
+
 PlayerInput.prototype.registerHold = function(options) {
   options.keys.split('').forEach(function(key) {
     var down = options.down;

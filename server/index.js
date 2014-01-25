@@ -61,7 +61,7 @@ cloak.configure({
       close: roomUtils.cleanUpRoomOnClose,
     },
 
-    reportPosition: function(user, data) {
+    reportPosition: function(data, user) {
       messageOtherMembers(user, 'reportPosition', data);
     },
 
@@ -69,7 +69,7 @@ cloak.configure({
       user.getRoom().messageMembers('reportLevelChange', data);
     },
 
-    reportAction: function(user, data) {
+    reportAction: function(data, user) {
       user.getRoom().messageMembers('reportAction', data);
     },
   }
