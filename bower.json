@@ -4,7 +4,7 @@
   "authors": [
     "Michael \"Z\" Goddard <mzgoddard@gmail.com>",
     "Ingrid",
-    "Brandon",
+    "Brendan",
     "Lily"
   ],
   "description": "A HTML5 game for Global Game Jam 2014.",
@@ -23,7 +23,6 @@
   ],
   "dependencies": {
     "pixi": "~1.4.3",
-    "underscore": "~1.5.2",
     "socket.io-client": "~0.9.16"
   }
 }
