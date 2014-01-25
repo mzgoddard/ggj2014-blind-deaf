@@ -1,0 +1,8 @@
+{
+  "type": "player",
+  "entity": {
+    "color": "blue",
+    "shape": "circle",
+    "radius": 2
+  }
+}
