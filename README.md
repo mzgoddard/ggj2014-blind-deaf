@@ -6,9 +6,9 @@
 
 ```shell
 npm install
-python -m SimpleHTTPServer 3000 >/dev/null 2>/dev/null
+npm start
 grunt
 grunt watch
 ```
 
-Open a browser to [localhost:3000/dist/index.html](http://localhost:3000/dist/index.html).
+Open a browser to [localhost:3000](http://localhost:3000/).

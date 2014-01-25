@@ -15,3 +15,7 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 resize();
+
+
+require('./networking.js');
+
