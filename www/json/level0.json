@@ -1,5 +1,7 @@
 {
   "files": [
+    "image/player.png",
+
     "json/actor-super.json",
     "json/actor-blind.json",
     "json/actor-deaf.json"

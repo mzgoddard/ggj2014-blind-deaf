@@ -74,13 +74,14 @@ module.exports = function(grunt) {
             'box2dweb': '../vendor/box2dweb.js',
             'boxbox': '../vendor/boxbox.js',
             'jst': '../dist/tmp/jst.js',
-            'cloak-client': '../node_modules/cloak/cloak-client.min.js'
+            'cloak-client': '../node_modules/cloak/cloak-client.min.js',
+            'pixi': '../bower_components/pixi/bin/pixi.dev.js'
           }
         },
         module: {
           // lodash, when, and box2dweb dependencies do not need to be parsed
           // for require(...). This will make webpack-ing faster.
-          noParse: /(lodash|vendor\/box2dweb|when|cloak-client)\.js$/
+          noParse: /(lodash|vendor\/box2dweb|when|cloak-client|pixi\.dev)\.js$/
         }
       }
     }

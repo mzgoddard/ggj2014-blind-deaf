@@ -4,18 +4,22 @@ require('./actor.player');
 // Load the level constructor.
 var Level = require('./level');
 
-// Create the first level.
-new Level('level0');
+Level.preload('level0');
 
 // Dynamically resize canvas
+var renderer = require('./renderer');
 function resize() {
-  var canvas = document.querySelector('canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  renderer().resize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener('resize', resize);
-resize();
 
+window.addEventListener('load', function() {
+  resize();
+
+  // Create the first level.
+  new Level('level0');
+
+  console.log('load level0');
+});
 
 require('./networking.js');
-

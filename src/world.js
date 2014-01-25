@@ -9,7 +9,7 @@ var _worlds = {};
 function getWorld(id) {
   if (!_worlds[id]) {
     _worlds[id] = boxbox.createWorld(document.querySelector('canvas'), {
-      debugDraw: true,
+      debugDraw: false,
       gravity: {x: 0, y: 0}
     });
   }

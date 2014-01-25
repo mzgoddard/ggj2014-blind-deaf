@@ -1,3 +1,5 @@
 {
-  "super": "actor-super"
+  "super": "actor-super",
+  "filter": "AudioAll",
+  "playerSlot": 1
 }
