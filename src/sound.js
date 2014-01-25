@@ -22,9 +22,9 @@ sound.listener = ctx.listener;
 sound.volume = volume;
 
 sound.SoundNode = function(soundFile, x, y, z, callback){
-  x = x ? x : 0;
-  y = y ? y : 0;
-  z = z ? z : 0;
+  x !== undefined ? x : 0;
+  y !== undefined ? y : 0;
+  z !== undefined ? z : 0;
 
   // Source -> induvidual volume -> panner -> group volume -> destination.
   this.source = ctx.createBufferSource();
