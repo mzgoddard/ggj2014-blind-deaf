@@ -3,6 +3,20 @@ window._ = require('lodash');
 window.io = require('../bower_components/socket.io-client/dist/socket.io.min.js');
 require('cloak-client');
 
+var Level = require('./level');
+
+
+var messageQueue = [];
+
+var pushMessageToQueue = function(type) {
+  return function(data) {
+    messageQueue.push({
+      type: type,
+      data: data
+    });
+  };
+};
+
 cloak.configure({
   messages: {
     reportPosition: console.log.bind(console),
@@ -11,7 +25,15 @@ cloak.configure({
 
     reportAction: console.log.bind(console),
 
-    roomFull: console.log.bind(console)
+    roomFull: function() {
+      window.alert('This room is full');
+      window.location.pathname = '/' + parseInt(Math.random() * 1000000000);
+    },
+
+    assignRole: function(role) {
+      console.log('setPlayerSlog', role === 'deaf'? 0 : 1, role);
+      Level.setPlayerSlot(role === 'deaf'? 0 : 1);
+    },
 
   },
 
@@ -38,3 +60,10 @@ module.exports.reportLevelChange = function(newLevel) {
 module.exports.reportAction = function(action) {
   cloak.message('reportAction', action);
 };
+
+module.exports.messageQueue = messageQueue;
+
+module.exports.getState = function() {};
+
+
+module.exports.reportPosition = function() {};

@@ -2,6 +2,7 @@
 
 var cloak = require('cloak');
 var connect = require('connect');
+var _ = require('lodash');
 
 var expressServer = require('./express_server');
 var roomUtils = require('./room_utils');
@@ -26,18 +27,41 @@ cloak.configure({
   autoJoinLobby: false,
   defaultRoomSize: ROOM_SIZE,
   pruneEmptyRooms: 15000,
+  reconnectWait: 1000,
   messages: {
     joinRoom: function(roomName, user) {
+      var role;
       var room = roomUtils.getRoomForUrl(cloak, roomName);
-      if (room.getMembers().length >= ROOM_SIZE) {
+      var roles = room.data.roles = room.data.roles || {};
+      var members = room.getMembers();
+
+      var activeMembers = members.filter(function(member) {
+        return !member._socket.disconnected;
+      });
+
+      if (activeMembers.length >= ROOM_SIZE && !_.contains(members, user)) {
         user.message('roomFull', roomName);
-      } else {
-        room.addMember(user);
+        return;
       }
+
+      var activeRoles = _.compact(activeMembers.map(function(user) {
+        return roles[user.id];
+      }));
+
+      role = activeRoles[0] === 'deaf'? 'blind' : 'deaf';
+
+      console.log(user.id, role);
+      roles[user.id] = role;
+      user.message('assignRole', role);
+      room.addMember(user);
     },
 
     room: {
-      close: roomUtils.cleanUpRoomOnClose
+      close: roomUtils.cleanUpRoomOnClose,
+
+      memberLeaves: function() {
+        console.log('asdfasdf');
+      }
     },
 
     reportPosition: function(user, data) {
