@@ -38,7 +38,6 @@ sound.SoundNode = function(soundFile, x, y, z, callback){
   soundFile.buffer = buffer;
 
   this.source.buffer = soundFile.buffer;
-  this.source.start(ctx.currentTime);
 
   this.source.onended = function(e){
     if (callback !== undefined){
