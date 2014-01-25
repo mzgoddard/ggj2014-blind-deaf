@@ -11,6 +11,8 @@ cloak.configure({
 
     reportAction: console.log.bind(console),
 
+    roomFull: console.log.bind(console)
+
   },
 
   serverEvents: {

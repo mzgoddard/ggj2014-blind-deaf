@@ -19,13 +19,21 @@ var messageOtherMembers = function(user, message, data){
   });
 };
 
+const ROOM_SIZE = 2;
+
 cloak.configure({
   express: expressServer,
   autoJoinLobby: false,
+  defaultRoomSize: ROOM_SIZE,
+  pruneEmptyRooms: 15000,
   messages: {
     joinRoom: function(roomName, user) {
       var room = roomUtils.getRoomForUrl(cloak, roomName);
-      room.addMember(user);
+      if (room.getMembers().length >= ROOM_SIZE) {
+        user.message('roomFull', roomName);
+      } else {
+        room.addMember(user);
+      }
     },
 
     room: {
@@ -37,7 +45,6 @@ cloak.configure({
     },
 
     reportLevelChange: function(data, user) {
-      console.log(user);
       user.getRoom().messageMembers('reportLevelChange', data);
     },
 
