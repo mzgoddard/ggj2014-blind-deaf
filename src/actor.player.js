@@ -1,6 +1,7 @@
 var Actor = require('./actor');
 var playerInput = require('./playerinput');
 var playerFilter = require('./playerfilter');
+var sound = require('./sound');
 
 function PlayerActor(level, data) {
   Actor.call(this, level, data);
@@ -9,6 +10,8 @@ function PlayerActor(level, data) {
 
   this.filter = playerFilter.FilterType[data.filter] ||
     playerFilter.FilterType.VisualAll;
+
+  this.listener = sound.listener;
 }
 
 PlayerActor.prototype = Object.create( Actor.prototype );
@@ -26,6 +29,9 @@ PlayerActor.prototype.tick = function() {
   if (this.input.x || this.input.y) {
     this.entity.applyImpulse(300, this.input.x, this.input.y);
   }
+
+  var p = this.entity.position();
+  this.listener.setPosition(p.x, p.y, 0);
 
   this.updateSprite();
 };

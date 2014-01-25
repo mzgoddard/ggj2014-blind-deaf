@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var sound = require('./sound.js');
+var sound = require('./sound');
 var PIXI = require('pixi');
 
 var playerFilter = require('./playerfilter');
