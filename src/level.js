@@ -7,7 +7,7 @@ var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 var world = require('./world');
 var sound = require('./sound');
-var Network = require('./networking');
+var Network = require('./network');
 
 module.exports = Level;
 
