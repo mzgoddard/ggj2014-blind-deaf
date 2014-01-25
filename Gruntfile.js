@@ -54,8 +54,15 @@ module.exports = function(grunt) {
         devtool: 'source-map',
         resolve: {
           alias: {
-            'jst': './dist/tmp/jst.js'
+            'box2dweb': '../vendor/box2dweb.js',
+            'boxbox': '../vendor/boxbox.js',
+            'jst': '../dist/tmp/jst.js'
           }
+        },
+        module: {
+          // lodash, when, and box2dweb dependencies do not need to be parsed
+          // for require(...). This will make webpack-ing faster.
+          noParse: /(lodash|vendor\/box2dweb|when)\.js$/
         }
       }
     }
