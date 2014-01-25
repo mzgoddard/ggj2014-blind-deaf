@@ -6,6 +6,7 @@ var playerInput = require('./playerinput');
 var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 var world = require('./world');
+var sound = require('./sound');
 
 module.exports = Level;
 
@@ -27,6 +28,15 @@ function Level(name) {
       var position = player.sprite.position;
       stage.position.x = _renderer.view.width / 2 - position.x * scale;
       stage.position.y = _renderer.view.height / 2 - position.y * scale;
+      player.listener = sound.listener;
+
+      var updateListener = function(){
+        var p = this.entity.position();
+        this.listener.setPosition(p.x, p.y, 0);
+      };
+
+      player.entity.onTick(updateListener.bind(player));
+
       // stage.rotation = 1.5;
     }
 
