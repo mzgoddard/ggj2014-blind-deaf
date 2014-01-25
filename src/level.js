@@ -1,6 +1,10 @@
+var PIXI = require('pixi');
 var when = require('when');
 
 var Actor = require('./actor');
+var playerInput = require('./playerinput');
+var playerFilter = require('./playerfilter');
+var renderer = require('./renderer');
 var world = require('./world');
 
 module.exports = Level;
@@ -8,6 +12,29 @@ module.exports = Level;
 function Level(name) {
   this.name = name;
   this.world = world.get(name);
+  var _stage = this._stage = new PIXI.Stage();
+  var stage = this.stage = new PIXI.DisplayObjectContainer();
+  this._stage.addChild(stage);
+
+  var scale = 20;
+  stage.scale.x = stage.scale.y = scale;
+
+  this.world.onRender(function() {
+    var _renderer = renderer();
+
+    var player = playerInput.getActor();
+    if (player) {
+      var position = player.sprite.position;
+      stage.position.x = _renderer.view.width / 2 - position.x * scale;
+      stage.position.y = _renderer.view.height / 2 - position.y * scale;
+      // stage.rotation = 1.5;
+    }
+
+    _renderer.render(_stage);
+  });
+
+  _currentLevel = this;
+  playerFilter.setLevel(this);
 
   this._assetsPromise = Level.preload(name);
   this._dataPromise = this._assetsPromise.then(function(values) {
@@ -17,10 +44,27 @@ function Level(name) {
   this._dataPromise.then(this._onload.bind(this));
 }
 
+var _currentLevel = null;
+var _playerSlot = 0;
+Level.setPlayerSlot = function(slot) {
+  if (slot === undefined) {
+    slot = _playerSlot;
+  }
+  if (playerInput.actors[slot]) {
+    playerInput.setActor(playerInput.actors[slot])
+    playerFilter.setLocalFilter(playerInput.actors[slot].filter);
+  }
+};
+
 Level.prototype._onload = function(data) {
   data.actors.forEach(function(actorData) {
     Level.dataExtend(actorData).then(function(actorData) {
-      Actor.create(this, actorData);
+      if (actorData.type === 'player') {
+        var actor = Actor.create(this, actorData);
+        playerInput.actors[actor.playerSlot] = actor;
+
+        Level.setPlayerSlot();
+      }
     }.bind(this));
   }, this);
 };
