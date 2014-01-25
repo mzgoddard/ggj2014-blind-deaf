@@ -12,7 +12,12 @@ if (!AudioContext) {
 }
 
 var ctx = new AudioContext();
-var mainVolume = ctx.createGain();
+var volume = ctx.createGain();
+volume.connect(ctx.destination);
+
+sound.ctx = ctx;
+sound.listener = ctx.listener;
+sound.volume = volume;
 
 sound.SoundNode = function(soundFile, x, y, z){
   x = x ? x : 0;
@@ -26,9 +31,7 @@ sound.SoundNode = function(soundFile, x, y, z){
   this.source.connect(this.volume);
   this.panner = ctx.createPanner();
   this.volume.connect(this.panner);
-  this.panner.connect(ctx.destination);
-
-  this.source.loop = true;
+  this.panner.connect(volume);
 
   var snd = this;
 
