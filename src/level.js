@@ -93,7 +93,7 @@ Level.preload = function(name) {
     // Preload all assets.
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
-      return Level.raw(file, Level.assetRoot + file, 'arraybuffer', function(d){
+      return Level.raw(file, Level.assetRoot + file, 'arraybuffer').then(function(d){
         Level.cache[file] = d.response;
       });
     }));
@@ -111,7 +111,7 @@ Level.preload = function(name) {
   return assetsPromise;
 };
 
-Level.raw = function(name, path, type, then){
+Level.raw = function(name, path, type){
   var xhr = new XMLHttpRequest();
   xhr.open('GET', path);
 
@@ -127,10 +127,8 @@ Level.raw = function(name, path, type, then){
     xhr.onprogress = function(e) {
       notify({name: name, progress: e.loaded / e.total});
     };
-  }).then(function(e) {
-    if (then !== undefined){
-      return then(xhr);
-    }
+  }).then(function(e){
+    return xhr;
   }).then(null, function(e){console.error(e);throw e;});
 
   xhr.send();
@@ -139,7 +137,7 @@ Level.raw = function(name, path, type, then){
 };
 
 Level.data = function(name) {
-  return Level.raw(name, Level.jsonRoot + name + '.json', undefined, function(data){
+  return Level.raw(name, Level.jsonRoot + name + '.json', undefined).then(function(data){
     return Level.dataExtend(JSON.parse(data.responseText));
 });
 };
