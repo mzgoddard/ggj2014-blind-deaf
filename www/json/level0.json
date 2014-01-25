@@ -1,0 +1,22 @@
+{
+  "files": [
+    "json/actor-super.json",
+    "json/actor-blind.json",
+    "json/actor-deaf.json"
+  ],
+
+  "actors": [
+    {
+      "super": "actor-blind",
+      "entity": {
+        "x": 15, "y": 15
+      }
+    },
+    {
+      "super": "actor-deaf",
+      "entity": {
+        "x": 5, "y": 15
+      }
+    }
+  ]
+}
