@@ -1,10 +1,18 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     copy: {
-      index: {
-        files: {
-          'dist/index.html': 'www/index.html'
-        }
+      www: {
+        files: [
+          {
+            'dist/index.html': 'www/index.html'
+          },
+          {
+            expand: true,
+            cwd: 'www',
+            src: ['image/**/*', 'json/**/*', 'sound/**/*'],
+            dest: 'dist'
+          }
+        ]
       }
     },
 
@@ -38,8 +46,17 @@ module.exports = function(grunt) {
         tasks: ['handlebars']
       },
       src: {
-        files: ['src/**/*', 'dist/tmp/jst.js'],
+        files: ['vendor/**/*', 'src/**/*', 'dist/tmp/jst.js'],
         tasks: ['webpack']
+      },
+      www: {
+        files: [
+          'www/index.html',
+          'www/image/**/*',
+          'www/json/**/*',
+          'www/sound/**/*'
+        ],
+        tasks: ['copy']
       }
     },
 
