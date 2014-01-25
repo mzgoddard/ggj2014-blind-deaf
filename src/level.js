@@ -94,7 +94,7 @@ Level.preload = function(name) {
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
       return Level.raw(file, Level.assetRoot + file, 'arraybuffer', function(d){
-        Level.cache[file] = d;
+        Level.cache[file] = d.response;
       });
     }));
   });
@@ -131,7 +131,7 @@ Level.raw = function(name, path, type, then){
     if (then !== undefined){
       return then(xhr);
     }
-  }).then(null, console.error.bind(console));
+  }).then(null, function(e){console.error(e);throw e;});
 
   xhr.send();
 
