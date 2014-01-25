@@ -11,6 +11,6 @@ module.exports = function() {
     );
   }
   return _renderer;
-}
+};
 
 module.exports.scale = 30;
