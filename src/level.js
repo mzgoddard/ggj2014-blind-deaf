@@ -38,37 +38,20 @@ Level.prototype.destroy = function() {
 Level.jsonRoot = 'json/';
 Level.assetRoot = './';
 
+Level.cache = {};
+
 Level.preload = function(name) {
   var dataPromise = this.data(name);
 
   var progressMap = {};
+
   var assetsPromise = dataPromise.then(function(level) {
     // Preload all assets.
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', Level.assetRoot + file);
-      // We won't pay attention to the content but inform the browser to treat
-      // it as binary data anyway.
-      // (mzgoddard: I don't know if this is beneficial or harmful.)
-      xhr.responseType = 'arraybuffer';
-
-      var promise = when.promise(function(resolve, reject, notify) {
-        xhr.onload = function(e) {
-          resolve();
-        };
-        xhr.onerror = function(e) {
-          reject(new Error(e.message));
-        };
-        xhr.onprogress = function(e) {
-          notify({name: file, progress: e.loaded / e.total});
-        };
+      return Level.raw(file, Level.assetRoot + file, 'arraybuffer', function(d){
+        Level.cache[file] = d;
       });
-
-      xhr.send();
-
-      return promise;
     }));
   });
 
@@ -84,9 +67,13 @@ Level.preload = function(name) {
   return assetsPromise;
 };
 
-Level.data = function(name) {
+Level.raw = function(name, path, type, then){
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', Level.jsonRoot + name + '.json');
+  xhr.open('GET', path);
+
+  if (type !== undefined) {
+    xhr.responseType = type;
+  }
 
   var xhrPromise = when.promise(function(resolve, reject, notify) {
     xhr.onload = resolve;
@@ -97,12 +84,20 @@ Level.data = function(name) {
       notify({name: name, progress: e.loaded / e.total});
     };
   }).then(function(e) {
-    return Level.dataExtend(JSON.parse(xhr.responseText));
-  });
+    if (then !== undefined){
+      return then(xhr);
+    }
+  }).then(null, console.error.bind(console));
 
   xhr.send();
 
   return xhrPromise;
+};
+
+Level.data = function(name) {
+  return Level.raw(name, Level.jsonRoot + name + '.json', undefined, function(data){
+    return Level.dataExtend(JSON.parse(data.responseText));
+});
 };
 
 Level.dataExtend = function(data) {

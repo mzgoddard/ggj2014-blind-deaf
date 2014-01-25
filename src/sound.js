@@ -1,3 +1,5 @@
+
+
 var sound = {};
 
 // Check for AudioContext support.
@@ -19,11 +21,10 @@ sound.ctx = ctx;
 sound.listener = ctx.listener;
 sound.volume = volume;
 
-sound.SoundNode = function(soundFile, x, y, z){
+sound.SoundNode = function(soundFile, x, y, z, callback){
   x = x ? x : 0;
   y = y ? y : 0;
   z = z ? z : 0;
-
 
   // Source -> induvidual volume -> panner -> group volume -> destination.
   this.source = ctx.createBufferSource();
@@ -33,19 +34,12 @@ sound.SoundNode = function(soundFile, x, y, z){
   this.volume.connect(this.panner);
   this.panner.connect(volume);
 
-  var snd = this;
+  var buffer = ctx.createBuffer(soundFile.response, false);
 
-  var request = new XMLHttpRequest();
-  request.open("GET", soundFile, true);
-  request.responseType = "arraybuffer";
-  request.onload = function(e) {
-    var buffer = ctx.createBuffer(this.response, false);
-    this.buffer = buffer;
+  soundFile.buffer = buffer;
 
-    snd.source.buffer = this.buffer;
-    snd.source.start(ctx.currentTime);
-  };
-  request.send();
+  this.source.buffer = soundFile.buffer;
+  this.source.start(ctx.currentTime);
 };
 
 
