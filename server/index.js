@@ -9,6 +9,11 @@ var roomUtils = require('./room_utils');
 
 var messageOtherMembers = function(user, message, data){
   var room = user.getRoom();
+
+  // If you are not in a room yet don't do anything.
+  if (!room) {
+    return;
+  }
   var members = room.getMembers();
 
   var otherMembers = members.filter(function(member) {
