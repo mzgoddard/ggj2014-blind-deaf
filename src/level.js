@@ -15,7 +15,11 @@ function Level(name) {
   this.name = name;
   this.world = world.get(name);
   var _stage = this._stage = new PIXI.Stage();
+  var background = this.background = new PIXI.DisplayObjectContainer();
+  var middleground = this.middleground = new PIXI.DisplayObjectContainer();
   var stage = this.stage = new PIXI.DisplayObjectContainer();
+  this.stage.addChild(background);
+  this.stage.addChild(middleground);
   this._stage.addChild(stage);
 
   var scale = 20;
@@ -49,6 +53,8 @@ function Level(name) {
   _currentLevel = this;
   playerFilter.setLevel(this);
 
+  this.actorMap = {};
+
   this._assetsPromise = Level.preload(name);
   this._dataPromise = this._assetsPromise.then(function(values) {
     return values[0];
@@ -73,8 +79,13 @@ Level.setPlayerSlot = function(slot) {
 Level.prototype._onload = function(data) {
   data.actors.forEach(function(actorData) {
     Level.dataExtend(actorData).then(function(actorData) {
+      var actor = Actor.create(this, actorData);
+
+      if (actor.name) {
+        this.actorMap[actor.name] = actor;
+      }
+
       if (actorData.type === 'player') {
-        var actor = Actor.create(this, actorData);
         playerInput.actors[actor.playerSlot] = actor;
 
         Level.setPlayerSlot();
