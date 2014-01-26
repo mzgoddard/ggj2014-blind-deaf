@@ -1,5 +1,6 @@
 // Load actor types so that they register.
 require('./actor.player');
+require('./actor.step');
 
 // Load the level constructor.
 var Level = require('./level');

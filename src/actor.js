@@ -12,9 +12,12 @@ function Actor(level, data) {
   this.level = level;
   this.data = data;
 
-  var entity = this.entity = level.world.createEntity({
-    draw: function() {}
-  }, data.entity);
+  var entity;
+  if (data.entity) {
+    entity = this.entity = level.world.createEntity({
+      draw: function() {}
+    }, data.entity);
+  }
 
   if (this.tick) {
     entity.onTick(this.tick.bind(this));
@@ -26,7 +29,7 @@ function Actor(level, data) {
     this.sounds = [];
   }
 
-  var p = this.entity.position();
+  var p = this.position || this.entity.position();
   this.lastPosition = {x:p.x, y:p.y};
 
   if (this.data.sprite) {
@@ -44,20 +47,67 @@ function Actor(level, data) {
 
     level.stage.addChild(this.sprite);
 
-    playerFilter.filterGraphics(this.data.sprite.filter, this.sprite);
+    playerFilter.filterGraphics(
+      playerFilter.FilterType[this.data.sprite.filter],
+      this.sprite
+    );
+  }
+
+  if (this.data.onmove) {
+    var position = this.position || this.entity.position();
+    this._lastMoveUpdatePosition = {x: position.x, y: position.y};
+    this.entity.onTick(this.updateMove.bind(this));
+  }
+
+  if (this.data.livefor) {
+    setTimeout(this.destroy.bind(this), this.data.livefor * 1000);
   }
 
 }
 
+Actor.prototype.destroy = function() {
+  if (this.entity) {
+    this.entity.destroy();
+  }
+  if (this.sprite && this.sprite.parent) {
+    this.sprite.parent.removeChild(this.sprite);
+  }
+};
+
 Actor.prototype.updateSprite = function() {
-  var position = this.entity.position();
+  var position = this.position || this.entity.position();
   this.sprite.position.x = position.x;
   this.sprite.position.y = position.y;
 
-  this.sprite.rotation = this.entity.rotation() / 180 * Math.PI;
+  this.sprite.rotation = (this.rotation || this.entity.rotation()) /
+    180 * Math.PI;
 
-  this.sprite.width = this.data.entity.radius * 2;
-  this.sprite.height = this.data.entity.radius * 2;
+  var radius = this.radius || this.data.entity.radius;
+  this.sprite.width = radius * 2;
+  this.sprite.height = radius * 2;
+};
+
+// See if a "move" actor event has happened. Example use to create a walk queue.
+Actor.prototype.updateMove = function() {
+  var lastPosition = this._lastMoveUpdatePosition;
+  var position = this.position || this.entity.position();
+  var dx = position.x - lastPosition.x, dy = position.y - lastPosition.y;
+  var diffDot = (dx * dx) + (dy * dy);
+  if (diffDot > this.data.onmove.distance * this.data.onmove.distance) {
+    this._lastMoveUpdatePosition.x = position.x;
+    this._lastMoveUpdatePosition.y = position.y;
+
+    Actor.create(
+      this.level,
+      _.extend(
+        {
+          position: _.clone(position),
+          rotation: Math.atan2(position.y, position.x) / Math.PI * 180
+        },
+        this.data.onmove
+      )
+    );
+  }
 };
 
 var _actorTypes = {};
