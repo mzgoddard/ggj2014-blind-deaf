@@ -20,9 +20,8 @@ function Actor(level, data) {
     entity.onTick(this.tick.bind(this));
   }
 
-  this.shouldUpdateSound = data.shouldUpdateSound;
   if (this.shouldUpdateSound === true){
-    entity.onTick(Actor.updateSoundNodes.bind(this));
+    entity.onTick(this.updateSoundNodes.bind(this));
     // An array of currently playing sounds.
     this.sounds = [];
   }
@@ -98,7 +97,7 @@ Actor.prototype.playSound = function(snd, cb){
   return s;
 };
 
-Actor.updateSoundNodes = function(){
+Actor.prototype.updateSoundNodes = function(){
   var p = this.entity.position();
   if (this.sounds.length === 0 || p === this.lastPosition){
     return;
