@@ -21,25 +21,22 @@ sound.ctx = ctx;
 sound.listener = ctx.listener;
 sound.volume = volume;
 
-sound.SoundNode = function(soundFile, x, y, z, callback){
+sound.SoundNode = function(audio, x, y, z, callback){
   x !== undefined ? x : 0;
   y !== undefined ? y : 0;
   z !== undefined ? z : 0;
 
   // Source -> induvidual volume -> panner -> group volume -> destination.
-  this.source = ctx.createBufferSource();
+  this.source = sound.ctx.createMediaElementSource(audio);
   this.volume = ctx.createGain();
   this.source.connect(this.volume);
   this.panner = ctx.createPanner();
   this.volume.connect(this.panner);
   this.panner.connect(volume);
-
-  var buffer = ctx.createBuffer(soundFile, false);
-  soundFile.buffer = buffer;
-
-  this.source.buffer = soundFile.buffer;
+  this.audio = audio;
 
   this.source.onended = function(e){
+    console.log('Sound ended.');
     if (callback !== undefined){
       callback(e);
     }

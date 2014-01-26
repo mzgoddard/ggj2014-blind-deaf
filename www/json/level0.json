@@ -5,7 +5,47 @@
 
     "json/actor-super.json",
     "json/actor-blind.json",
-    "json/actor-deaf.json"
+    "json/actor-deaf.json",
+
+    "button1.wav",
+    "footstep_tile3.wav",
+    "gunshot2.wav",
+    "pitch4.wav",
+    "teleporter1.wav",
+    "button2.wav",
+    "footstep_tile4.wav",
+    "itempickup1.wav",
+    "pitch5.wav",
+    "teleporter2.wav",
+    "door_close1.wav",
+    "footstep_wood1.wav",
+    "itempickup2.wav",
+    "pitch6.wav",
+    "teleporter3.wav",
+    "door_close2.wav",
+    "footstep_wood2.wav",
+    "radio1.wav",
+    "teleporter4.wav",
+    "door_open1.wav",
+    "footstep_wood3.wav",
+    "pitch1.mp3radio2.wav",
+    "door_open2.wav",
+    "goal1.wav",
+    "pitch1.wav",
+    "radio3.wav",
+    "footstep_tile1.wav",
+    "gunpickup1.wav",
+    "pitch2.wav",
+    "ricochet1.wav",
+    "footstep_tile2.wav",
+    "gunshot1.wav",
+    "pitch3.wav",
+    "ricochet2.wav",
+
+    "nyan.wav",
+    "br-jam-loop.wav",
+    "hihat.wav",
+    "gonnagetcha1.mp3"
   ],
 
   "actors": [
@@ -19,6 +59,14 @@
       "super": "actor-deaf",
       "entity": {
         "x": 5, "y": 15
+      },
+      "spawnSound": {
+        "file": "gonnagetcha1.mp3",
+        "properties": {
+          "volume": 1,
+          "loop": false
+        },
+        "filter": "AudioVisual"
       }
     },
 
