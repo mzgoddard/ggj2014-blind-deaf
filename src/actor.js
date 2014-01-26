@@ -5,6 +5,8 @@ var PIXI = require('pixi');
 var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 
+var cache = require('./cache');
+
 module.exports = Actor;
 
 function Actor(level, data) {
@@ -41,6 +43,12 @@ function Actor(level, data) {
     }
 
     this.updateSprite();
+
+    // Sounds!
+    if (data.spawnSound !== undefined){
+      this.playSound(cache[data.spawnSound.file], data.spawnSound);
+    }
+
 
     level.stage.addChild(this.sprite);
 
@@ -91,8 +99,16 @@ Actor.prototype.loadSound = function(snd, cb){
   return s;
 };
 
-Actor.prototype.playSound = function(snd, cb){
+Actor.prototype.playSound = function(snd, dict, cb){
   var s = this.loadSound(snd, cb);
+  if (dict !== undefined){
+    if (dict.loop !== undefined){
+      s.source.loop = dict.loop;
+    }
+    if (dict.volume !== undefined){
+      s.volume = dict.volume;
+    }
+  }
   s.source.start(sound.ctx.currentTime);
   return s;
 };

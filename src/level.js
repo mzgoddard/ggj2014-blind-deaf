@@ -7,6 +7,7 @@ var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 var world = require('./world');
 var sound = require('./sound');
+var cache = require('./cache');
 
 module.exports = Level;
 
@@ -92,8 +93,6 @@ Level.prototype.destroy = function() {
 Level.jsonRoot = 'json/';
 Level.assetRoot = './';
 
-Level.cache = {};
-
 Level.preload = function(name) {
   var dataPromise = this.data(name);
 
@@ -104,7 +103,7 @@ Level.preload = function(name) {
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
       return Level.raw(file, Level.assetRoot + file, 'arraybuffer').then(function(d){
-        Level.cache[file] = d.response;
+        cache[file] = d.response;
       });
     }));
   });
