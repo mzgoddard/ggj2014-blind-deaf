@@ -1,6 +1,7 @@
 {
   "files": [
     "image/player.png",
+    "image/soundmask.png",
 
     "json/actor-super.json",
     "json/actor-blind.json",
