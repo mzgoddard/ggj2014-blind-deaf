@@ -1,0 +1,6 @@
+{
+  "super": "tile",
+  "sprite": {
+    "texture": "image/tile_wood.png"
+  }
+}

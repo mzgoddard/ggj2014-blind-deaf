@@ -20,6 +20,389 @@
       "entity": {
         "x": 5, "y": 15
       }
+    },
+
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 0, "y": 0
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 5, "y": 0
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 10, "y": 0
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 15, "y": 0
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 0, "y": 5
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 5, "y": 5
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 10, "y": 5
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 15, "y": 5
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 0, "y": 10
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 5, "y": 10
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 10, "y": 10
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 15, "y": 10
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 0, "y": 15
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 5, "y": 15
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 10, "y": 15
+      }
+    },
+    {
+      "super": "tile-wood-visual",
+      "position": {
+        "x": 15, "y": 15
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -5
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -5
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -10
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -10
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 0, "y": -15
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -15
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -15
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 15, "y": -15
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 0, "y": -20
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -20
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -20
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 15, "y": -20
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 0, "y": -25
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -25
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -25
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 15, "y": -25
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 0, "y": -30
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 5, "y": -30
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 10, "y": -30
+      }
+    },
+    {
+      "super": "tile-grass-visual",
+      "position": {
+        "x": 15, "y": -30
+      }
+    },
+    {
+      "super": "tile-goal-visual",
+      "position": {
+        "x": 5, "y": -20
+      }
+    },
+    {
+      "super": "tile-goal-visual",
+      "position": {
+        "x": 10, "y": -20
+      }
+    },
+    {
+      "super": "tile-goal-visual",
+      "position": {
+        "x": 5, "y": -25
+      }
+    },
+    {
+      "super": "tile-goal-visual",
+      "position": {
+        "x": 10, "y": -25
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": 20, "y": 0
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": 20, "y": 10
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": -1, "y": 0
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": -1, "y": 10
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": -90,
+        "x": 0, "y": 21
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": -90,
+        "x": 10, "y": 21
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": 0,
+        "x": 4, "y": -10
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": 0,
+        "x": 15, "y": -10
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": -1, "y": -20
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": 20, "y": -20
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": -1, "y": -30
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "x": 20, "y": -30
+      }
+    },
+    {
+      "super": "half-wall",
+      "entity": {
+        "rotation": -90,
+        "x": 0, "y": -9
+      }
+    },
+    {
+      "super": "half-wall",
+      "entity": {
+        "rotation": -90,
+        "x": 15, "y": -9
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": -90,
+        "x": 0, "y": -30
+      }
+    },
+    {
+      "super": "wall",
+      "entity": {
+        "rotation": -90,
+        "x": 10, "y": -30
+      }
+    },
+    {
+      "super": "half-wall",
+      "name": "doorWall1",
+      "entity": {
+        "rotation": -90,
+        "x": 0, "y": 0
+      }
+    },
+    {
+      "super": "half-wall",
+      "name": "doorWall2",
+      "entity": {
+        "rotation": -90,
+        "x": 15, "y": 0
+      }
+    },
+    {
+      "super": "door",
+      "entity": {
+        "rotation": 180,
+        "x": 10, "y": -0.5
+      },
+      "joint": {
+        "entity2": "doorWall1"
+      }
+    },
+    {
+      "super": "door",
+      "entity": {
+        "rotation": 0,
+        "x": 10, "y": -0.5
+      },
+      "height": -1,
+      "joint": {
+        "jointPositionOnEntity1": {"x": 3, "y": -0.5},
+        "entity2": "doorWall2"
+      }
     }
   ]
 }
