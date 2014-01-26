@@ -32,6 +32,9 @@ module.exports.start = function(Level) {
         Level.setPlayerSlot(role === 'deaf'? 0 : 1);
       },
 
+      nav: function(url) {
+        window.location = url;
+      }
     },
 
     serverEvents: {
