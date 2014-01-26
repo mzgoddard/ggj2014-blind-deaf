@@ -21,5 +21,3 @@ window.addEventListener('load', function() {
 
   console.log('load level0');
 });
-
-require('./networking.js');

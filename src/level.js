@@ -7,6 +7,7 @@ var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 var world = require('./world');
 var sound = require('./sound');
+var Network = require('./network');
 
 module.exports = Level;
 
@@ -38,6 +39,8 @@ function Level(name) {
       player.entity.onTick(updateListener.bind(player));
 
       // stage.rotation = 1.5;
+
+      Network.reportPosition(player);
     }
 
     _renderer.render(_stage);
@@ -60,6 +63,7 @@ Level.setPlayerSlot = function(slot) {
   if (slot === undefined) {
     slot = _playerSlot;
   }
+  _playerSlot = slot;
   if (playerInput.actors[slot]) {
     playerInput.setActor(playerInput.actors[slot]);
     playerFilter.setLocalFilter(playerInput.actors[slot].filter);
@@ -161,3 +165,14 @@ Level.dataExtend = function(data) {
     return when(data);
   }
 };
+
+
+Level.netUpdate = function(data) {
+  var netPlayer = playerInput.getNetPlayer();
+  if (netPlayer) {
+    netPlayer.entity.rotation(data.rotation);
+    netPlayer.entity.position(data.position);
+  }
+};
+
+Network.start(Level);
