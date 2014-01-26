@@ -63,6 +63,7 @@ Level.setPlayerSlot = function(slot) {
   if (slot === undefined) {
     slot = _playerSlot;
   }
+  _playerSlot = slot;
   if (playerInput.actors[slot]) {
     playerInput.setActor(playerInput.actors[slot]);
     playerFilter.setLocalFilter(playerInput.actors[slot].filter);
