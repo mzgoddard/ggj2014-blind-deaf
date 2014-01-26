@@ -2,7 +2,7 @@ var info = document.querySelector('#info');
 var stateSpan = document.querySelector('.state');
 var counterState = document.querySelector('.counter-state');
 var dismiss = document.querySelector('#dismiss');
-var canvas = document.querySelector('canvas.hidden');
+
 var waiting = document.querySelector('.waiting');
 var ready = document.querySelector('.ready');
 
@@ -11,7 +11,10 @@ var ready = document.querySelector('.ready');
 dismiss.addEventListener('click', function(e) {
   e.preventDefault();
   info.className = 'hidden';
-  canvas.className = '';
+  var canvi = document.querySelectorAll('canvas');
+  [].forEach.call(canvi, function(canvas) {
+      canvas.className = '';
+  });
 });
 
 
