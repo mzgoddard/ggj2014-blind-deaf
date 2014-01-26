@@ -46,9 +46,10 @@ function Actor(level, data) {
 
     // Sounds!
     if (data.spawnSound !== undefined){
-      this.playSound(cache[data.spawnSound.file], data.spawnSound);
+      this.playSound(cache[data.spawnSound.file], data.spawnSound, function(){
+        //
+      });
     }
-
 
     level.stage.addChild(this.sprite);
 
@@ -83,15 +84,16 @@ Actor.prototype.loadSound = function(snd, cb){
   var p = this.entity.position();
 
   var callback = function(e){
-  if (this.shouldUpdateSound === true){
-    _.remove(this.sounds, function(i){
-      return (i === s);
-    });
-  }
+    if (this.shouldUpdateSound === true){
+      _.remove(this.sounds, function(i){
+        return (i === s);
+      });
+    }
     if (cb !== undefined){
       cb();
     }
   };
+
   var s = new sound.SoundNode(snd, p.x, p.y, 0, callback.bind(this));
   if (this.shouldUpdateSound === true){
     this.sounds.push(s);
@@ -102,6 +104,7 @@ Actor.prototype.loadSound = function(snd, cb){
 Actor.prototype.playSound = function(snd, dict, cb){
   var s = this.loadSound(snd, cb);
   if (dict !== undefined){
+    // For some reason if you explictly set loop to false it stops the callback from firing.
     if (dict.loop !== undefined){
       s.source.loop = dict.loop;
     }
@@ -109,7 +112,8 @@ Actor.prototype.playSound = function(snd, dict, cb){
       s.volume = dict.volume;
     }
   }
-  s.source.start(sound.ctx.currentTime);
+  //s.source.start(sound.ctx.currentTime);
+  s.audio.play();
   return s;
 };
 
