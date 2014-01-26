@@ -9,6 +9,7 @@ var renderer = require('./renderer');
 var world = require('./world');
 var sound = require('./sound');
 var cache = require('./cache');
+var Network = require('./network');
 
 module.exports = Level;
 
@@ -16,7 +17,11 @@ function Level(name) {
   this.name = name;
   this.world = world.get(name);
   var _stage = this._stage = new PIXI.Stage();
+  var background = this.background = new PIXI.DisplayObjectContainer();
+  var middleground = this.middleground = new PIXI.DisplayObjectContainer();
   var stage = this.stage = new PIXI.DisplayObjectContainer();
+  this.stage.addChild(background);
+  this.stage.addChild(middleground);
   this._stage.addChild(stage);
 
   var scale = 20;
@@ -40,6 +45,8 @@ function Level(name) {
       player.entity.onTick(updateListener.bind(player));
 
       // stage.rotation = 1.5;
+
+      Network.reportPosition(player);
     }
 
     _renderer.render(_stage);
@@ -47,6 +54,8 @@ function Level(name) {
 
   _currentLevel = this;
   playerFilter.setLevel(this);
+
+  this.actorMap = {};
 
   this._assetsPromise = Level.preload(name);
   this._dataPromise = this._assetsPromise.then(function(values) {
@@ -62,6 +71,7 @@ Level.setPlayerSlot = function(slot) {
   if (slot === undefined) {
     slot = _playerSlot;
   }
+  _playerSlot = slot;
   if (playerInput.actors[slot]) {
     playerInput.setActor(playerInput.actors[slot]);
     playerFilter.setLocalFilter(playerInput.actors[slot].filter);
@@ -71,8 +81,13 @@ Level.setPlayerSlot = function(slot) {
 Level.prototype._onload = function(data) {
   data.actors.forEach(function(actorData) {
     Level.dataExtend(actorData).then(function(actorData) {
+      var actor = Actor.create(this, actorData);
+
+      if (actor.name) {
+        this.actorMap[actor.name] = actor;
+      }
+
       if (actorData.type === 'player') {
-        var actor = Actor.create(this, actorData);
         playerInput.actors[actor.playerSlot] = actor;
 
         Level.setPlayerSlot();
@@ -182,23 +197,12 @@ Level.dataExtend = function(data) {
   }
 };
 
-function syncStream(node){
-  //http://stackoverflow.com/questions/10365335/decodeaudiodata-returning-a-null-error
-  var buf8 = new Uint8Array(node.buf);
-  buf8.indexOf = Array.prototype.indexOf;
-  var i=node.sync, b=buf8;
-  while(1) {
-    node.retry++;
-    i=b.indexOf(0xFF,i); if(i==-1 || (b[i+1] & 0xE0 == 0xE0 )) break;
-    i++;
+Level.netUpdate = function(data) {
+  var netPlayer = playerInput.getNetPlayer();
+  if (netPlayer) {
+    netPlayer.entity.rotation(data.rotation);
+    netPlayer.entity.position(data.position);
   }
+};
 
-  if(i!=-1) {
-    var tmp=node.buf.slice(i); //carefull there it returns copy
-                  delete(node.buf); node.buf=null;
-    node.buf=tmp;
-    node.sync=i;
-    return true;
-  }
-  return false;
-}
+Network.start(Level);

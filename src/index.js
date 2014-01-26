@@ -1,8 +1,10 @@
 // Load actor types so that they register.
 require('./actor.player');
+require('./actor.step');
 
 // Load the level constructor.
 var Level = require('./level');
+window.Level = Level;
 
 Level.preload('level0');
 
@@ -21,5 +23,3 @@ window.addEventListener('load', function() {
 
   console.log('load level0');
 });
-
-require('./networking.js');

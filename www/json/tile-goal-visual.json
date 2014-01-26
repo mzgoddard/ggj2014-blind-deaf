@@ -1,0 +1,7 @@
+{
+  "super": "tile",
+  "sprite": {
+    "parent": "middleground",
+    "texture": "image/goal.png"
+  }
+}
