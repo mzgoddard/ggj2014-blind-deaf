@@ -59,14 +59,6 @@
       "super": "actor-deaf",
       "entity": {
         "x": 5, "y": 15
-      },
-      "spawnSound": {
-        "file": "gonnagetcha1.mp3",
-        "properties": {
-          "volume": 1,
-          "loop": false
-        },
-        "filter": "AudioVisual"
       }
     },
 
@@ -195,7 +187,7 @@
       "position": {
         "x": 0, "y": -15
       }
-    },
+   },
     {
       "super": "tile-grass-visual",
       "position": {
