@@ -2,6 +2,7 @@ window._ = require('lodash');
 
 window.io = require('../bower_components/socket.io-client/dist/socket.io.min.js');
 require('cloak-client');
+var Info = require('./info');
 
 var pushMessageToQueue = function(type) {
   return function(data) {
@@ -16,6 +17,7 @@ module.exports.start = function(Level) {
   cloak.configure({
     messages: {
       reportPosition: function(data) {
+        Info.ready();
         Level.netUpdate(JSON.parse(data));
       },
 
@@ -29,6 +31,7 @@ module.exports.start = function(Level) {
       },
 
       assignRole: function(role) {
+        Info.setState(role);
         Level.setPlayerSlot(role === 'deaf'? 0 : 1);
       },
 
