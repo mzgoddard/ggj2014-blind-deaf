@@ -168,7 +168,7 @@ Actor.create = function(level, data) {
 Actor.prototype.loadSound = function(snd, cb){
   // Gets the sound ready and starts tracking the sound, but doesn't play it
   // incase you want to mess with the settings first.
-  var p = this.entity.position();
+  var p = this.position;
 
   var callback = function(e){
     if (this.shouldUpdateSound === true){
@@ -191,7 +191,6 @@ Actor.prototype.loadSound = function(snd, cb){
 Actor.prototype.playSound = function(snd, dict, cb){
   var s = this.loadSound(snd, cb);
   if (dict !== undefined){
-    // For some reason if you explictly set loop to false it stops the callback from firing.
     if (dict.loop !== undefined){
       s.source.loop = dict.loop;
     }
@@ -199,7 +198,7 @@ Actor.prototype.playSound = function(snd, dict, cb){
       s.volume = dict.volume;
     }
   }
-  //s.source.start(sound.ctx.currentTime);
+
   s.audio.play();
   return s;
 };
