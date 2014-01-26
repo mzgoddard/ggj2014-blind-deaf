@@ -3,6 +3,7 @@ require('./actor.player');
 
 // Load the level constructor.
 var Level = require('./level');
+window.Level = Level;
 
 Level.preload('level0');
 

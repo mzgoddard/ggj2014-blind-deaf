@@ -18,16 +18,30 @@ PlayerFilter.prototype.setLevel = function(level) {
   this.level = level;
 };
 
+var recurseChildren = function(container, fn, ctx) {
+  if (!container.children) { return; }
+  container.children.forEach(function(child) {
+    recurseChildren(child, fn, ctx);
+    fn.call(ctx || this, child);
+  });
+};
+
 PlayerFilter.prototype.setLocalFilter = function(filter) {
   this.localFilter = filter;
 
   // TODO: Update gain and alpha/visible for sound and graphics when switching.
+  recurseChildren(this.level.stage, function(child) {
+    if (child.gameplayFilter) {
+      this.filterGraphics(child.gameplayFilter, child);
+    }
+  }, this);
 };
 
 PlayerFilter.prototype.filterGraphics = function(filter, displayObject) {
   if (filter === undefined) {
     filter = FilterType.VisualImage;
   }
+  displayObject.gameplayFilter = filter;
   displayObject.visible = (filter & this.localFilter) !== 0;
 };
 
