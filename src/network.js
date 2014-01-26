@@ -12,26 +12,7 @@ var pushMessageToQueue = function(type) {
   };
 };
 
-module.exports.reportPosition = function(player) {
-  var data = {
-    rotation: player.entity.rotation(),
-    position: player.entity.position()
-  };
-  cloak.message('reportPosition', JSON.stringify(data));
-};
-
-module.exports.reportLevelChange = function(newLevel) {
-  cloak.message('reportLevelChange', newLevel);
-};
-
-module.exports.reportAction = function(action) {
-  cloak.message('reportAction', action);
-};
-
-
 module.exports.start = function(Level) {
-
-
   cloak.configure({
     messages: {
       reportPosition: function(data) {
@@ -63,4 +44,20 @@ module.exports.start = function(Level) {
   });
 
   cloak.run('localhost');
+};
+
+module.exports.reportPosition = function(player) {
+  var data = {
+    rotation: player.entity.rotation(),
+    position: player.entity.position()
+  };
+  cloak.message('reportPosition', JSON.stringify(data));
+};
+
+module.exports.reportLevelChange = function(newLevel) {
+  cloak.message('reportLevelChange', newLevel);
+};
+
+module.exports.reportAction = function(action) {
+  cloak.message('reportAction', action);
 };
