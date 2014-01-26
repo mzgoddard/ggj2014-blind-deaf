@@ -1,12 +1,47 @@
 <html>
-<head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>GGJ 2014 Co-op Game</title>
-  <link rel="stylesheet" href="index.css" type="text/css" media="screen" title="no title" charset="utf-8">
-</head>
-<body id="top">
-  <canvas style="display:none"></canvas>
-  <canvas></canvas>
-  <script src="blinddeaf.js" type="text/javascript" charset="utf-8"></script>
-</body>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>GGJ 2014 Co-op Game</title>
+    <link rel="stylesheet" href="index.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body id="top">
+    <canvas style="display:none" class="hidden"></canvas>
+    <canvas class="hidden"></canvas>
+    <div id="info" class="">
+      <img src="/image/title.png" alt="Silent Lens">
+      <p>Welcome to Silent Lens, a HTML5 game made for the <a href="http://globalgamejam.org" >Global Game Jam</a> 2014.</p>
+      <p>Silent Lens is a two player game. You play as
+        a <span class="state">deaf</span> individual who must work
+        with your <span class="counter-state">blind</span> friend to
+        solve puzzles. Individually you won't have all the clues
+        needed to complete the level. Communicate with your parter to
+        descibe what you are seeing or hearing and solve the challenge
+        together.</p>
+
+      <p class="controls">
+        Use <strong>W A S D</strong> to move your character through the doors.
+      </p>
+
+      <p class="waiting">
+        You are now waiting for a second player to join. Share the
+        current url with a friend to get them to join your game. Or
+        click anywhere to get started.
+      </p>
+
+      <p class="ready hidden">
+        Your partner is here! Click anywhere join them now.
+      </p>
+
+      <h3>Credits</h3>
+      <ul>
+        <li>Z Goddard</li>
+        <li>bmac</li>
+        <li>Ingrid</li>
+        <li>Lili</li>
+        <li>Renzo G. Heredia</li>
+      </ul>
+
+    </div>
+    <script src="blinddeaf.js" type="text/javascript" charset="utf-8"></script>
+  </body>
 </html>
