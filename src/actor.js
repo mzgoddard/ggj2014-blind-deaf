@@ -19,6 +19,15 @@ function Actor(level, data) {
     }, data.entity);
   }
 
+  if (data.joint) {
+    var entity1 = this.entity;
+    var entity2 = level.actorMap[data.joint.entity2].entity;
+    if (data.joint.entity1 !== 'this') {
+      entity1 = level.actorMap[data.joint.entity1].entity;
+    }
+    this.joint = level.world.createJoint(entity1, entity2, data.joint);
+  }
+
   if (this.tick) {
     entity.onTick(this.tick.bind(this));
   }
@@ -42,15 +51,29 @@ function Actor(level, data) {
       this.sprite.anchor.x = this.data.sprite.anchor.x;
       this.sprite.anchor.y = this.data.sprite.anchor.y;
     }
+    if (this.data.sprite.frame) {
+      var rect = new PIXI.Rectangle();
+      _.extend(rect, this.data.sprite.frame);
+      this.sprite.setFrame(rect);
+    }
 
     this.updateSprite();
 
-    level.stage.addChild(this.sprite);
+    // Default to "foreground"
+    var parent = level.stage;
+    if (this.data.sprite.parent) {
+      parent = level[this.data.sprite.parent];
+    }
+    parent.addChild(this.sprite);
 
     playerFilter.filterGraphics(
       playerFilter.FilterType[this.data.sprite.filter],
       this.sprite
     );
+
+    if (this.data.sprite.shouldUpdate && this.entity) {
+      this.entity.onTick(this.updateSprite.bind(this));
+    }
   }
 
   if (this.data.onmove) {
@@ -58,6 +81,13 @@ function Actor(level, data) {
     this._lastMoveUpdatePosition = {x: position.x, y: position.y};
     this.entity.onTick(this.updateMove.bind(this));
   }
+
+  // if (this.data.onrotate) {
+  //   var rotation =
+  //     this.rotation !== undefined ? this.rotation : this.entity.rotation();
+  //   this._lastRotateUpateRotation = rotation;
+  //   this.entity.onTick(this.updateRotate.bind(this));
+  // }
 
   if (this.data.livefor) {
     setTimeout(this.destroy.bind(this), this.data.livefor * 1000);
@@ -69,6 +99,9 @@ Actor.prototype.destroy = function() {
   if (this.entity) {
     this.entity.destroy();
   }
+  if (this.joint) {
+    this.joint.destroy();
+  }
   if (this.sprite && this.sprite.parent) {
     this.sprite.parent.removeChild(this.sprite);
   }
@@ -79,12 +112,15 @@ Actor.prototype.updateSprite = function() {
   this.sprite.position.x = position.x;
   this.sprite.position.y = position.y;
 
-  this.sprite.rotation = (this.rotation || this.entity.rotation()) /
+  this.sprite.rotation =
+    (this.rotation !== undefined ? this.rotation : this.entity.rotation()) /
     180 * Math.PI;
 
-  var radius = this.radius || this.data.entity.radius;
-  this.sprite.width = radius * 2;
-  this.sprite.height = radius * 2;
+  var width = this.width || this.data.entity.width;
+  var height = this.height || this.data.entity.height;
+  var radius = (this.radius || this.data.entity.radius) * 2;
+  this.sprite.width = width || radius;
+  this.sprite.height = height || radius;
 };
 
 // See if a "move" actor event has happened. Example use to create a walk queue.
@@ -157,3 +193,7 @@ Actor.prototype.updateSoundNodes = function(){
     this.sounds[s].panner.setPosition(p.x, p.y, 0);
   }
 };
+
+Actor.register('actor', function(level, data) {
+  return new Actor(level, data);
+});

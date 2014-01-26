@@ -1,0 +1,27 @@
+{
+  "type": "actor",
+  "entity": {
+    "type": "dynamic",
+    "shape": "polygon",
+    "points": [
+      {"x": 0, "y": 0},
+      {"x": 3, "y": 0},
+      {"x": 3, "y": 1},
+      {"x": 0, "y": 1}
+    ]
+  },
+  "joint": {
+    "type": "revolute",
+    "entity1": "this",
+    "jointPositionOnEntity1": {"x": -3, "y": 0.5},
+    "enableMotor": true,
+    "allowCollisions": true
+  },
+  "width": 5,
+  "height": 1,
+  "sprite": {
+    "anchor": {"x": 0, "y": 0.5},
+    "texture": "image/door.png",
+    "shouldUpdate": true
+  }
+}

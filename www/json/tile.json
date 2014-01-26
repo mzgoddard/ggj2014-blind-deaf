@@ -1,0 +1,9 @@
+{
+  "type": "actor",
+  "entity": false,
+  "radius": 2.5,
+  "rotation": 0,
+  "sprite": {
+    "parent": "background"
+  }
+}

@@ -624,6 +624,7 @@ var Box2D = require('box2dweb');
                 joint.collideConnected = true;
             }
             this._world.CreateJoint(joint);
+            return joint;
         },
 
         /**
