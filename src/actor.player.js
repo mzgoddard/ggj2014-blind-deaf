@@ -1,6 +1,7 @@
 var Actor = require('./actor');
 var playerInput = require('./playerinput');
 var playerFilter = require('./playerfilter');
+var sound = require('./sound');
 
 function PlayerActor(level, data) {
   Actor.call(this, level, data);

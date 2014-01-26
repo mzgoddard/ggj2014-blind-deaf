@@ -6,6 +6,7 @@ var playerInput = require('./playerinput');
 var playerFilter = require('./playerfilter');
 var renderer = require('./renderer');
 var world = require('./world');
+var sound = require('./sound');
 
 module.exports = Level;
 
@@ -27,6 +28,15 @@ function Level(name) {
       var position = player.sprite.position;
       stage.position.x = _renderer.view.width / 2 - position.x * scale;
       stage.position.y = _renderer.view.height / 2 - position.y * scale;
+      player.listener = sound.listener;
+
+      var updateListener = function(){
+        var p = this.entity.position();
+        this.listener.setPosition(p.x, p.y, 0);
+      };
+
+      player.entity.onTick(updateListener.bind(player));
+
       // stage.rotation = 1.5;
     }
 
@@ -82,37 +92,20 @@ Level.prototype.destroy = function() {
 Level.jsonRoot = 'json/';
 Level.assetRoot = './';
 
+Level.cache = {};
+
 Level.preload = function(name) {
   var dataPromise = this.data(name);
 
   var progressMap = {};
+
   var assetsPromise = dataPromise.then(function(level) {
     // Preload all assets.
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', Level.assetRoot + file);
-      // We won't pay attention to the content but inform the browser to treat
-      // it as binary data anyway.
-      // (mzgoddard: I don't know if this is beneficial or harmful.)
-      xhr.responseType = 'arraybuffer';
-
-      var promise = when.promise(function(resolve, reject, notify) {
-        xhr.onload = function(e) {
-          resolve();
-        };
-        xhr.onerror = function(e) {
-          reject(new Error(e.message));
-        };
-        xhr.onprogress = function(e) {
-          notify({name: file, progress: e.loaded / e.total});
-        };
+      return Level.raw(file, Level.assetRoot + file, 'arraybuffer').then(function(d){
+        Level.cache[file] = d.response;
       });
-
-      xhr.send();
-
-      return promise;
     }));
   });
 
@@ -128,9 +121,13 @@ Level.preload = function(name) {
   return assetsPromise;
 };
 
-Level.data = function(name) {
+Level.raw = function(name, path, type){
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', Level.jsonRoot + name + '.json');
+  xhr.open('GET', path);
+
+  if (type !== undefined) {
+    xhr.responseType = type;
+  }
 
   var xhrPromise = when.promise(function(resolve, reject, notify) {
     xhr.onload = resolve;
@@ -140,13 +137,19 @@ Level.data = function(name) {
     xhr.onprogress = function(e) {
       notify({name: name, progress: e.loaded / e.total});
     };
-  }).then(function(e) {
-    return Level.dataExtend(JSON.parse(xhr.responseText));
-  });
+  }).then(function(e){
+    return xhr;
+  }).then(null, function(e){console.error(e);throw e;});
 
   xhr.send();
 
   return xhrPromise;
+};
+
+Level.data = function(name) {
+  return Level.raw(name, Level.jsonRoot + name + '.json', undefined).then(function(data){
+    return Level.dataExtend(JSON.parse(data.responseText));
+});
 };
 
 Level.dataExtend = function(data) {

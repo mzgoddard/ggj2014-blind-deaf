@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var sound = require('./sound');
 var PIXI = require('pixi');
 
 var playerFilter = require('./playerfilter');
@@ -19,6 +20,15 @@ function Actor(level, data) {
     entity.onTick(this.tick.bind(this));
   }
 
+  if (this.shouldUpdateSound === true){
+    entity.onTick(this.updateSoundNodes.bind(this));
+    // An array of currently playing sounds.
+    this.sounds = [];
+  }
+
+  var p = this.entity.position();
+  this.lastPosition = {x:p.x, y:p.y};
+
   if (this.data.sprite) {
     var texture;
     if (this.data.sprite.texture) {
@@ -36,6 +46,7 @@ function Actor(level, data) {
 
     playerFilter.filterGraphics(this.data.sprite.filter, this.sprite);
   }
+
 }
 
 Actor.prototype.updateSprite = function() {
@@ -56,4 +67,43 @@ Actor.register = function(name, fn) {
 
 Actor.create = function(level, data) {
   return _actorTypes[data.type](level, data);
+};
+
+Actor.prototype.loadSound = function(snd, cb){
+  // Gets the sound ready and starts tracking the sound, but doesn't play it
+  // incase you want to mess with the settings first.
+  var p = this.entity.position();
+
+  var callback = function(e){
+  if (this.shouldUpdateSound === true){
+    _.remove(this.sounds, function(i){
+      return (i === s);
+    });
+  }
+    if (cb !== undefined){
+      cb();
+    }
+  };
+  var s = new sound.SoundNode(snd, p.x, p.y, 0, callback.bind(this));
+  if (this.shouldUpdateSound === true){
+    this.sounds.push(s);
+  }
+  return s;
+};
+
+Actor.prototype.playSound = function(snd, cb){
+  var s = this.loadSound(snd, cb);
+  s.source.start(sound.ctx.currentTime);
+  return s;
+};
+
+Actor.prototype.updateSoundNodes = function(){
+  var p = this.entity.position();
+  if (this.sounds.length === 0 || p === this.lastPosition){
+    return;
+  }
+
+  for (s in this.sounds){
+    this.sounds[s].panner.setPosition(p.x, p.y, 0);
+  }
 };
