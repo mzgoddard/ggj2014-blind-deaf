@@ -1,5 +1,6 @@
 var PIXI = require('pixi');
 var when = require('when');
+require('when/monitor/console');
 
 var Actor = require('./actor');
 var playerInput = require('./playerinput');
@@ -50,9 +51,9 @@ function Level(name) {
   this._assetsPromise = Level.preload(name);
   this._dataPromise = this._assetsPromise.then(function(values) {
     return values[0];
-  });
+  }).otherwise(function(e){ console.error(e.stack||e); throw e; });
 
-  this._dataPromise.then(this._onload.bind(this));
+  this._dataPromise.then(this._onload.bind(this)).otherwise(function(e){ console.error(e.stack||e); throw e; });
 }
 
 var _currentLevel = null;
@@ -76,7 +77,7 @@ Level.prototype._onload = function(data) {
 
         Level.setPlayerSlot();
       }
-    }.bind(this));
+    }.bind(this)).otherwise(function(e){ console.error(e.stack||e); throw e; });
   }, this);
 };
 
@@ -103,9 +104,30 @@ Level.preload = function(name) {
     return when.join(level, when.map(level.files, function(file) {
       progressMap[file] = 0;
       return Level.raw(file, Level.assetRoot + file, 'arraybuffer').then(function(d){
-        cache[file] = d.response;
-      });
-    }));
+        // Cache buffers for sound.
+        var suffix = file.substr(file.length - 3, file.length);
+        if (suffix === "wav" || suffix === "mp3"){
+          return when.promise(function(resolve, reject){
+            // Try to create a buffer off an audio tag?
+            var audio = new Audio();
+            audio.src = "sound/" + file;
+
+            //audio.controls = true;
+            //audio.autoplay = true;
+
+            // Not sure this is necessary.
+            document.body.appendChild(audio);
+
+            cache[file] = audio;
+            resolve(d);
+          }).then(function(e){
+            //console.log(e);
+}).otherwise(function(e){ console.error(e.stack||e); throw e; });
+        } else {
+          cache[file] = d.response;
+        }
+      }).otherwise(function(e){ console.error(e.stack||e); throw e; });
+    })).otherwise(function(e){ console.error(e.stack||e); throw e; });
   });
 
   assetsPromise.then(null, null, function(progress) {
@@ -115,9 +137,8 @@ Level.preload = function(name) {
     // console.log(_.reduce(progressMap, function(v, a) {
     //   return v + a;
     // }, 0), progressMap);
-  });
-
-  return assetsPromise;
+  }).otherwise(function(e){ console.error(e.stack||e); throw e; });
+  return assetsPromise.otherwise(function(e){ console.error(e.stack||e); throw e; });
 };
 
 Level.raw = function(name, path, type){
@@ -138,7 +159,7 @@ Level.raw = function(name, path, type){
     };
   }).then(function(e){
     return xhr;
-  }).then(null, function(e){console.error(e);throw e;});
+  }).then(null, function(e){console.error(e);throw e;}).otherwise(function(e){ console.error(e.stack||e); throw e; });
 
   xhr.send();
 
@@ -148,15 +169,36 @@ Level.raw = function(name, path, type){
 Level.data = function(name) {
   return Level.raw(name, Level.jsonRoot + name + '.json', undefined).then(function(data){
     return Level.dataExtend(JSON.parse(data.responseText));
-});
+}).otherwise(function(e){ console.error(e.stack||e); throw e; });
 };
 
 Level.dataExtend = function(data) {
   if (data.super) {
     return Level.data(data.super).then(function(superData) {
       return _.merge(superData, data);
-    });
+    }).otherwise(function(e){ console.error(e.stack||e); throw e; });
   } else {
     return when(data);
   }
 };
+
+function syncStream(node){
+  //http://stackoverflow.com/questions/10365335/decodeaudiodata-returning-a-null-error
+  var buf8 = new Uint8Array(node.buf);
+  buf8.indexOf = Array.prototype.indexOf;
+  var i=node.sync, b=buf8;
+  while(1) {
+    node.retry++;
+    i=b.indexOf(0xFF,i); if(i==-1 || (b[i+1] & 0xE0 == 0xE0 )) break;
+    i++;
+  }
+
+  if(i!=-1) {
+    var tmp=node.buf.slice(i); //carefull there it returns copy
+                  delete(node.buf); node.buf=null;
+    node.buf=tmp;
+    node.sync=i;
+    return true;
+  }
+  return false;
+}
