@@ -1,14 +1,13 @@
 var info = document.querySelector('#info');
 var stateSpan = document.querySelector('.state');
 var counterState = document.querySelector('.counter-state');
-var dismiss = document.querySelector('#dismiss');
 
 var waiting = document.querySelector('.waiting');
 var ready = document.querySelector('.ready');
 
 
 
-dismiss.addEventListener('click', function(e) {
+var dismissHandler = _.once(function(e) {
   e.preventDefault();
   info.className = 'hidden';
   var canvi = document.querySelectorAll('canvas');
@@ -16,6 +15,8 @@ dismiss.addEventListener('click', function(e) {
       canvas.className = '';
   });
 });
+
+document.body.addEventListener('click', dismissHandler);
 
 
 exports.setState = function(state) {
